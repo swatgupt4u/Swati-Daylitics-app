@@ -1,0 +1,13 @@
+# Streamlit secrets (CRITICAL: Do not commit!)
+.streamlit/secrets.toml
+
+# Python environments
+.venv/
+env/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Local database files
+productivity.db
