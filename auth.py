@@ -26,7 +26,9 @@ def exchange_code_for_token(code, client_id, client_secret, redirect_uri):
     response = requests.post(token_url, data=payload)
     if response.status_code == 200:
         return response.json()
-    return None
+    else:
+        # Return error details instead of None
+        return {"error": response.status_code, "details": response.text}
 
 def get_user_info(access_token):
     user_info_url = "https://www.googleapis.com/oauth2/v2/userinfo"
@@ -64,7 +66,10 @@ def verify_google_oauth():
                 st.session_state.user_name = user_info.get("name", "User")
                 st.rerun()
         else:
-            st.error(f"Token exchange failed: {token_data}")
+            if token_data:
+                st.error(f"❌ Token exchange failed (HTTP {token_data.get('error')})\n\n**Details:**\n{token_data.get('details', 'Unknown error')}")
+            else:
+                st.error("Token exchange failed: No response from Google")
 
     st.title("Welcome to Daylytics 📈")
     st.write("Please sign in to manage your tasks securely.")
